@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { StackProvider, StackTheme } from "@stackframe/stack";
 import { stackServerApp } from "../stack";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Architects_Daughter } from "next/font/google";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -12,6 +12,12 @@ const geistSans = Geist({
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+});
+
+const architectsDaughter = Architects_Daughter({
+  variable: "--font-architects-daughter",
+  subsets: ["latin"],
+  weight: "400",
 });
 
 export const metadata: Metadata = {
@@ -27,7 +33,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${architectsDaughter.variable} antialiased`}
       ><StackProvider app={stackServerApp}><StackTheme>
         {children}
       </StackTheme></StackProvider></body>
