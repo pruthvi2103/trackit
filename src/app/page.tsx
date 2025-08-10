@@ -14,7 +14,7 @@ function getWeekDays(from: Date) {
   })
 }
 
-export default async function Page({ searchParams }: { searchParams: { week?: string } }) {
+export default async function Page({ searchParams }: { searchParams: Promise<{ week?: string }> }) {
   const session = await stackServerApp.getUser()
   if (!session) {
     return (
@@ -29,7 +29,8 @@ export default async function Page({ searchParams }: { searchParams: { week?: st
 
   await ensureSchema()
 
-  const isoWeek = searchParams.week ? new Date(searchParams.week) : new Date()
+  const resolvedSearchParams = await searchParams
+  const isoWeek = resolvedSearchParams.week ? new Date(resolvedSearchParams.week) : new Date()
   const weekDays = getWeekDays(isoWeek)
   const start = format(weekDays[0].date, 'yyyy-MM-dd')
   const end = format(endOfWeek(isoWeek, { weekStartsOn: 1 }), 'yyyy-MM-dd')
