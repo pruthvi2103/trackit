@@ -1,0 +1,47 @@
+# Next.js 15 App Router Patterns
+
+## File Structure
+- Follow the App Router file-based routing convention
+- Use `page.tsx` for route components
+- Use `layout.tsx` for shared layouts
+- Use `loading.tsx` for loading states
+- Use `[...stack]` for catch-all routes (as seen in [src/app/handler/[...stack]/page.tsx](mdc:src/app/handler/[...stack]/page.tsx))
+
+## Layout Patterns
+- Wrap the entire app with StackFrame provider in [src/app/layout.tsx](mdc:src/app/layout.tsx)
+- Use proper font loading with Next.js font optimization
+- Implement responsive design with Tailwind CSS
+- Use semantic HTML structure with proper accessibility
+
+## Component Patterns
+- Export components as default exports for pages
+- Use proper TypeScript typing for props and children
+- Implement responsive layouts with Tailwind breakpoint classes
+- Use Next.js Image component for optimized images
+
+## StackFrame Integration
+- The app is configured with StackFrame for error tracking
+- StackFrame provider wraps the entire application
+- Server-side configuration in [src/stack.tsx](mdc:src/stack.tsx)
+
+## Example Page Structure
+```typescript
+import Image from "next/image";
+
+export default function PageName() {
+  return (
+    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
+      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
+        {/* Page content */}
+      </main>
+      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
+        {/* Footer content */}
+      </footer>
+    </div>
+  );
+}
+```
+description:
+globs:
+alwaysApply: false
+---

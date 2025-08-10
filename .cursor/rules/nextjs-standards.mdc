@@ -1,0 +1,71 @@
+# NextJS Coding Standards
+
+## Core Principles
+- ALWAYS make routes READ-ONLY by default unless write operations are explicitly needed
+- NEVER leak sensitive keys, API tokens, or database credentials in client-side code
+- Prefer server components and server actions for all data operations
+- Use proper NextJS 13+ App Router patterns
+
+## Route Security
+- Default to `export const dynamic = 'force-static'` for read-only routes
+- Only use `export const dynamic = 'force-dynamic'` when real-time data is required
+- Implement proper authentication and authorization checks in server components
+- Use environment variables for all sensitive configuration
+
+## Data Fetching
+- Use server components for initial data loading
+- Implement server actions for all database writes and mutations
+- Use `revalidatePath()` and `revalidateTag()` for cache invalidation
+- Prefer `unstable_cache()` for expensive computations
+
+## Performance
+- Implement proper loading states with `loading.tsx`
+- Use `Suspense` boundaries for streaming
+- Leverage NextJS built-in image optimization
+- Implement proper error boundaries with `error.tsx`
+
+## Example Server Component Pattern
+```typescript
+// page.tsx - Server Component
+import { Suspense } from 'react'
+import { getData } from './service'
+import { LoadingSpinner } from '@/components/ui/loading-spinner'
+
+export default async function Page() {
+  const data = await getData()
+  
+  return (
+    <Suspense fallback={<LoadingSpinner />}>
+      {/* Component content */}
+    </Suspense>
+  )
+}
+```
+
+## Example Server Action Pattern
+```typescript
+// actions.ts
+'use server'
+
+import { revalidatePath } from 'next/cache'
+import { db } from '@/lib/db'
+
+export async function updateData(formData: FormData) {
+  // Validate and process data
+  const result = await db.update(/* ... */)
+  
+  // Revalidate affected paths
+  revalidatePath('/path/to/affected/route')
+  
+  return result
+}
+```
+
+description: Core NextJS coding standards and best practices
+globs: ["**/*.tsx", "**/*.ts", "**/*.jsx", "**/*.js"]
+alwaysApply: true
+---
+description:
+globs:
+alwaysApply: false
+---

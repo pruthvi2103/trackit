@@ -1,0 +1,71 @@
+# UI Components Standards
+
+## Component Structure
+- Use Radix UI primitives as the foundation (imported from `@radix-ui/react-*`)
+- Implement variants using `class-variance-authority` (cva) with proper TypeScript typing
+- Export both the component and its variants for flexibility
+- Use the `cn()` utility from [src/lib/utils.ts](mdc:src/lib/utils.ts) for class merging
+
+## Styling Patterns
+- Use Tailwind CSS classes with consistent spacing and sizing
+- Implement responsive design with Tailwind breakpoint prefixes
+- Use CSS custom properties for theme values when appropriate
+- Follow the established variant patterns from [src/components/ui/button.tsx](mdc:src/components/ui/button.tsx)
+
+## Accessibility
+- Leverage Radix UI's built-in accessibility features
+- Use proper ARIA attributes and semantic HTML
+- Ensure keyboard navigation support
+- Test with screen readers
+
+## Component Organization
+- Common/shared UI components go in `@/components/ui/`
+- Feature-specific components go in feature folders under `components/`
+- Never put feature-specific logic in common UI components
+- Keep UI components focused on presentation, not business logic
+
+## Example Component Structure
+```typescript
+import * as React from "react"
+import { cva, type VariantProps } from "class-variance-authority"
+import { cn } from "@/lib/utils"
+
+const componentVariants = cva(
+  "base-classes",
+  {
+    variants: {
+      variant: {
+        default: "default-classes",
+        secondary: "secondary-classes",
+      },
+      size: {
+        default: "default-size",
+        sm: "small-size",
+        lg: "large-size",
+      },
+    },
+    defaultVariants: {
+      variant: "default",
+      size: "default",
+    },
+  }
+)
+
+interface ComponentProps extends VariantProps<typeof componentVariants> {
+  children: React.ReactNode;
+  className?: string;
+}
+
+export { Component, componentVariants }
+```
+
+## Integration with Feature Architecture
+- UI components should be pure and stateless when possible
+- Business logic should be handled by hooks in feature folders
+- Data fetching should be handled by services, not UI components
+- UI components should receive data as props, not fetch it directly
+
+description: UI component standards and best practices
+globs: ["**/*.tsx", "**/*.ts", "**/*.jsx", "**/*.js"]
+alwaysApply: true
+---

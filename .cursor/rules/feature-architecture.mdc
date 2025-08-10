@@ -1,0 +1,83 @@
+# Feature Folder Architecture Standards
+
+## Feature Folder Structure
+Every feature folder MUST follow this exact structure:
+```
+feature-name/
+├── page.tsx          # Main page component (server component)
+├── components/       # UI components specific to this feature
+├── service.ts        # All data fetching logic (server-side)
+├── hook.ts           # All component logic and state management
+├── actions.ts        # Server actions for mutations (if needed)
+├── loading.tsx       # Loading state (if needed)
+├── error.tsx         # Error boundary (if needed)
+└── types.ts          # TypeScript types for this feature
+```
+
+## Component Organization
+- **page.tsx**: Main page component, should be a server component by default
+- **components/**: Contains only UI components specific to this feature
+- **service.ts**: Contains all data fetching, API calls, and database operations
+- **hook.ts**: Contains all React hooks, state management, and business logic
+- **actions.ts**: Contains server actions for form submissions and mutations
+
+## Import Patterns
+- Feature components should import from their local `components/` folder
+- Common/shared components should import from `@/components/ui/`
+- Data fetching should always go through `service.ts`
+- Component logic should always go through `hook.ts`
+
+## Example Feature Structure
+```typescript
+// feature-name/page.tsx
+import { getData } from './service'
+import { FeatureComponent } from './components/feature-component'
+
+export default async function FeaturePage() {
+  const data = await getData()
+  return <FeatureComponent data={data} />
+}
+
+// feature-name/service.ts
+export async function getData() {
+  // Database queries, API calls, etc.
+  return await db.query(/* ... */)
+}
+
+// feature-name/hook.ts
+import { useState, useEffect } from 'react'
+import { getData } from './service'
+
+export function useFeatureData() {
+  const [data, setData] = useState(null)
+  
+  useEffect(() => {
+    // Component logic here
+  }, [])
+  
+  return { data }
+}
+
+// feature-name/components/feature-component.tsx
+import { useFeatureData } from '../hook'
+
+export function FeatureComponent({ data }) {
+  const { processedData } = useFeatureData()
+  return <div>{/* Component JSX */}</div>
+}
+```
+
+## Isolation Rules
+- NEVER put feature-specific logic in common folders
+- NEVER put common/shared logic in feature folders
+- Each feature should be completely self-contained
+- Common utilities go in `@/lib/`, common components go in `@/components/ui/`
+
+description: Feature folder architecture and organization standards
+globs: ["**/*.tsx", "**/*.ts", "**/*.jsx", "**/*.js"]
+alwaysApply: true
+---
+description:
+globs:
+alwaysApply: false
+---

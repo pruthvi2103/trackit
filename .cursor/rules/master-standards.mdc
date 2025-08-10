@@ -1,0 +1,107 @@
+# Master Coding Standards - Quick Reference
+
+## 🚨 CRITICAL RULES (Always Follow)
+1. **ALWAYS make routes READ-ONLY by default** unless write operations are explicitly needed
+2. **NEVER leak sensitive keys, API tokens, or database credentials** in client-side code
+3. **Prefer server components and server actions** for all data operations
+4. **Follow the exact feature folder structure** for every feature
+
+## 📁 Feature Folder Structure (MANDATORY)
+```
+feature-name/
+├── page.tsx          # Main page (server component)
+├── components/       # UI components for this feature
+├── service.ts        # All data fetching logic
+├── hook.ts           # All component logic
+├── actions.ts        # Server actions (if needed)
+├── loading.tsx       # Loading state (if needed)
+├── error.tsx         # Error boundary (if needed)
+└── types.ts          # TypeScript types
+```
+
+## 🏗️ Architecture Principles
+- **Server-First**: Default to server components, only use client components when necessary
+- **Feature Isolation**: Each feature is completely self-contained
+- **Common Separation**: Common utilities go in `@/lib/`, common components go in `@/components/ui/`
+- **Data Flow**: Server Component → Service → Database → Render → Client Component (if needed)
+
+## 🔒 Security Requirements
+- Use environment variables for ALL sensitive configuration
+- Never hardcode API keys or secrets
+- Implement proper authentication in server components
+- Use middleware for route protection
+
+## 📝 Code Patterns
+
+### Server Component (Default)
+```typescript
+// page.tsx
+export default async function Page() {
+  const data = await getData() // from service.ts
+  return <Component data={data} />
+}
+```
+
+### Client Component (Only when needed)
+```typescript
+'use client'
+import { useFeatureLogic } from '../hook'
+
+export function InteractiveComponent() {
+  const { state, handlers } = useFeatureLogic()
+  return <div>{/* JSX */}</div>
+}
+```
+
+### Service Layer
+```typescript
+// service.ts
+export async function getData() {
+  // Database queries, API calls
+  return await db.query(/* ... */)
+}
+```
+
+### Hook Layer
+```typescript
+// hook.ts
+export function useFeatureLogic() {
+  // Component logic, state management
+  return { state, handlers }
+}
+```
+
+### Server Actions
+```typescript
+// actions.ts
+'use server'
+export async function updateData(formData: FormData) {
+  // Validation, processing, database updates
+  revalidatePath('/path')
+}
+```
+
+## 🚫 What NOT to Do
+- ❌ Put feature logic in common folders
+- ❌ Put common logic in feature folders
+- ❌ Use client components for data fetching
+- ❌ Hardcode sensitive information
+- ❌ Mix concerns between layers
+- ❌ Skip the required folder structure
+
+## ✅ What ALWAYS to Do
+- ✅ Use server components by default
+- ✅ Follow the exact feature folder structure
+- ✅ Use environment variables for secrets
+- ✅ Keep features isolated
+- ✅ Use services for data operations
+- ✅ Use hooks for component logic
+
+description: Master reference for all coding standards and best practices
+globs: ["**/*.tsx", "**/*.ts", "**/*.jsx", "**/*.js"]
+alwaysApply: true
+---
+description:
+globs:
+alwaysApply: false
+---

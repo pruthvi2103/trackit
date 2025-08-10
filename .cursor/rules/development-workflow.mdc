@@ -1,0 +1,42 @@
+# Development Workflow
+
+## Available Scripts
+- `npm run dev` - Start development server with Turbopack
+- `npm run build` - Build for production
+- `npm run start` - Start production server
+- `npm run lint` - Run ESLint
+
+## Development Server
+- Uses Next.js 15 with Turbopack for faster development
+- Hot reloading enabled
+- TypeScript compilation with strict mode
+- Tailwind CSS compilation
+
+## Code Quality
+- ESLint configuration follows Next.js recommendations
+- TypeScript strict mode enforced
+- Consistent code formatting expected
+- Component testing recommended
+
+## File Naming Conventions
+- Use kebab-case for file names
+- Use PascalCase for component names
+- Use camelCase for functions and variables
+- Use UPPER_SNAKE_CASE for constants
+
+## Git Workflow
+- Feature branches for new development
+- Descriptive commit messages
+- Pull request reviews for main branch
+- Keep commits atomic and focused
+
+## Dependencies
+- All UI components from Radix UI ecosystem
+- Form handling with React Hook Form + Zod
+- Styling with Tailwind CSS v4
+- Error tracking with StackFrame
+- Database integration with Neon (serverless)
+description:
+globs:
+alwaysApply: false
+---

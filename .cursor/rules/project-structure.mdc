@@ -1,0 +1,29 @@
+# Project Structure Guide
+
+This is a Next.js 15 project with TypeScript, Tailwind CSS, and StackFrame integration.
+
+## Key Files and Directories
+
+- **Entry Point**: [src/app/layout.tsx](mdc:src/app/layout.tsx) - Root layout with StackFrame provider
+- **Main Page**: [src/app/page.tsx](mdc:src/app/page.tsx) - Home page component
+- **Stack Configuration**: [src/stack.tsx](mdc:src/stack.tsx) - StackFrame server app setup
+- **UI Components**: [src/components/ui/](mdc:src/components/ui/) - Radix UI components with shadcn/ui styling
+- **Utilities**: [src/lib/utils.ts](mdc:src/lib/utils.ts) - Common utility functions including `cn()` for class merging
+- **Hooks**: [src/hooks/](mdc:src/hooks/) - Custom React hooks
+- **Configuration**: [tsconfig.json](mdc:tsconfig.json) - TypeScript configuration with path aliases
+- **Dependencies**: [package.json](mdc:package.json) - Project dependencies and scripts
+
+## Path Aliases
+- `@/*` maps to `./src/*` (configured in tsconfig.json)
+
+## Tech Stack
+- Next.js 15 with App Router
+- TypeScript with strict mode
+- Tailwind CSS v4
+- Radix UI components
+- StackFrame for error tracking
+- React Hook Form with Zod validation
+description:
+globs:
+alwaysApply: false
+---

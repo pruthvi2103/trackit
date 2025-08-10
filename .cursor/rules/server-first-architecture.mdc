@@ -1,0 +1,112 @@
+# Server-First Architecture Standards
+
+## Core Principle
+ALWAYS prefer server components and server actions over client-side alternatives for:
+- Database reads and writes
+- API calls
+- Authentication checks
+- Data processing
+- File operations
+
+## Server Components
+- Default to server components for all pages and components
+- Only use client components when you need:
+  - `useState`, `useEffect`, or other React hooks
+  - Browser APIs (`window`, `document`, etc.)
+  - Event handlers (`onClick`, `onSubmit`, etc.)
+  - Interactive state management
+
+## Server Actions
+- Use server actions for all form submissions
+- Use server actions for all data mutations
+- Implement proper validation in server actions
+- Use `revalidatePath()` and `revalidateTag()` for cache management
+
+## Data Flow Pattern
+```
+Server Component (page.tsx)
+    ↓
+Service Layer (service.ts)
+    ↓
+Database/API
+    ↓
+Server Component renders with data
+    ↓
+Client Component (if needed for interactivity)
+    ↓
+Server Action (if mutation needed)
+    ↓
+Service Layer updates data
+    ↓
+Cache invalidation
+```
+
+## Example Server-First Implementation
+```typescript
+// page.tsx - Server Component
+import { getData } from './service'
+import { InteractiveForm } from './components/interactive-form'
+
+export default async function Page() {
+  // Server-side data fetching
+  const data = await getData()
+  
+  return (
+    <div>
+      <h1>{data.title}</h1>
+      {/* Client component only for interactivity */}
+      <InteractiveForm initialData={data} />
+    </div>
+  )
+}
+
+// components/interactive-form.tsx - Client Component
+'use client'
+import { updateData } from '../actions'
+
+export function InteractiveForm({ initialData }) {
+  const handleSubmit = async (formData: FormData) => {
+    // Server action handles the mutation
+    await updateData(formData)
+  }
+  
+  return (
+    <form action={handleSubmit}>
+      {/* Form fields */}
+    </form>
+  )
+}
+
+// actions.ts - Server Action
+'use server'
+import { updateDataInDB } from '../service'
+import { revalidatePath } from 'next/cache'
+
+export async function updateData(formData: FormData) {
+  const result = await updateDataInDB(formData)
+  revalidatePath('/current-path')
+  return result
+}
+```
+
+## When to Use Client Components
+- Forms with complex validation logic
+- Interactive charts or visualizations
+- Real-time updates (WebSockets)
+- Complex state management
+- Browser-specific functionality
+
+## Security Best Practices
+- Never expose database queries in client components
+- Always validate data in server actions
+- Use proper authentication checks in server components
+- Implement rate limiting for server actions
+
+description: Server-first architecture and server component standards
+globs: ["**/*.tsx", "**/*.ts", "**/*.jsx", "**/*.js"]
+alwaysApply: true
+---
+description:
+globs:
+alwaysApply: false
+---

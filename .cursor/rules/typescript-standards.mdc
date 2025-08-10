@@ -1,0 +1,40 @@
+# TypeScript Standards
+
+## Code Style
+- Use TypeScript strict mode (enabled in [tsconfig.json](mdc:tsconfig.json))
+- Prefer explicit type annotations for function parameters and return types
+- Use `Readonly<T>` for props interfaces when appropriate
+- Import types with `import type` syntax
+
+## React Patterns
+- Use functional components with proper TypeScript typing
+- Define prop interfaces with descriptive names
+- Use `React.ReactNode` for children props
+- Leverage `VariantProps` from class-variance-authority for component variants
+
+## File Organization
+- Place types and interfaces near the top of files
+- Use barrel exports for related components
+- Follow Next.js 15 App Router conventions
+- Use path aliases (`@/*`) for imports from src directory
+
+## Examples
+```typescript
+// Props interface
+interface ComponentProps {
+  children: React.ReactNode;
+  variant?: "default" | "destructive";
+}
+
+// Component with proper typing
+export default function Component({
+  children,
+  variant = "default",
+}: Readonly<ComponentProps>) {
+  // Component implementation
+}
+```
+description:
+globs:
+alwaysApply: false
+---

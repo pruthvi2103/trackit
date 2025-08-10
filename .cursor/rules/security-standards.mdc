@@ -1,0 +1,124 @@
+# Security Standards
+
+## API Key and Secret Management
+- NEVER hardcode API keys, tokens, or secrets in source code
+- NEVER commit sensitive credentials to version control
+- ALWAYS use environment variables for all sensitive configuration
+- Use `.env.local` for local development (never commit this file)
+
+## Environment Variable Pattern
+```typescript
+// ❌ WRONG - Never do this
+const API_KEY = "sk-1234567890abcdef"
+
+// ✅ CORRECT - Use environment variables
+const API_KEY = process.env.API_KEY
+
+// ✅ CORRECT - With validation
+if (!process.env.API_KEY) {
+  throw new Error('API_KEY environment variable is required')
+}
+const API_KEY = process.env.API_KEY
+```
+
+## Route Security
+- Default all routes to read-only (`export const dynamic = 'force-static'`)
+- Only enable dynamic routes when absolutely necessary
+- Implement proper authentication checks in server components
+- Use middleware for route protection when needed
+
+## Database Security
+- Never expose database connection strings in client code
+- Use connection pooling and proper connection management
+- Implement proper input validation and sanitization
+- Use parameterized queries to prevent SQL injection
+
+## Example Secure Service Pattern
+```typescript
+// service.ts
+import { db } from '@/lib/db'
+
+export async function getSecureData(userId: string) {
+  // Validate input
+  if (!userId || typeof userId !== 'string') {
+    throw new Error('Invalid user ID')
+  }
+  
+  // Use parameterized query
+  const result = await db.query(
+    'SELECT * FROM data WHERE user_id = ? AND is_active = true',
+    [userId]
+  )
+  
+  return result
+}
+```
+
+## Client-Side Security
+- Never send sensitive data to client components
+- Implement proper CORS policies
+- Use HTTPS in production
+- Implement rate limiting for API endpoints
+
+## Authentication Patterns
+```typescript
+// middleware.ts
+import { NextResponse } from 'next/server'
+import type { NextRequest } from 'next/server'
+
+export function middleware(request: NextRequest) {
+  const token = request.cookies.get('auth-token')
+  
+  if (!token && request.nextUrl.pathname.startsWith('/protected')) {
+    return NextResponse.redirect(new URL('/login', request.url))
+  }
+  
+  return NextResponse.next()
+}
+
+export const config = {
+  matcher: '/protected/:path*'
+}
+```
+
+## Error Handling
+- Never expose internal error details to clients
+- Log errors securely on the server
+- Return generic error messages to users
+- Implement proper error boundaries
+
+## Example Secure Error Handling
+```typescript
+// actions.ts
+'use server'
+
+export async function secureAction(formData: FormData) {
+  try {
+    // Validate input
+    const data = validateFormData(formData)
+    
+    // Process data
+    const result = await processData(data)
+    
+    return { success: true, data: result }
+  } catch (error) {
+    // Log error securely (never expose to client)
+    console.error('Action failed:', error)
+    
+    // Return generic error to client
+    return { 
+      success: false, 
+      error: 'An error occurred while processing your request' 
+    }
+  }
+}
+```
+
+description: Security standards and best practices for protecting sensitive data
+globs: ["**/*.tsx", "**/*.ts", "**/*.jsx", "**/*.js"]
+alwaysApply: true
+---
+description:
+globs:
+alwaysApply: false
+---

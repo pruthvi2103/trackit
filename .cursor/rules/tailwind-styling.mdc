@@ -1,0 +1,44 @@
+# Tailwind CSS v4 Styling Standards
+
+## Class Organization
+- Use consistent spacing with Tailwind's spacing scale
+- Implement responsive design with breakpoint prefixes (`sm:`, `md:`, `lg:`)
+- Use semantic color classes (`bg-primary`, `text-foreground`, etc.)
+- Leverage CSS custom properties for theme values
+
+## Layout Patterns
+- Use CSS Grid for complex layouts (`grid`, `grid-rows-*`, `grid-cols-*`)
+- Use Flexbox for component-level layouts (`flex`, `items-center`, `justify-center`)
+- Implement responsive spacing with responsive prefixes
+- Use consistent gap values (`gap-4`, `gap-8`, `gap-16`)
+
+## Component Styling
+- Use the `cn()` utility from [src/lib/utils.ts](mdc:src/lib/utils.ts) for class merging
+- Implement variant-based styling with class-variance-authority
+- Use consistent sizing (`h-9`, `h-10`, `px-4`, `py-2`)
+- Apply hover and focus states consistently
+
+## Common Patterns from the Codebase
+```typescript
+// Responsive grid layout
+"grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen"
+
+// Responsive spacing
+"p-8 pb-20 gap-16 sm:p-20"
+
+// Component sizing
+"h-9 px-4 py-2" // default button size
+"h-10 sm:h-12" // responsive height
+
+// Interactive states
+"hover:bg-primary/90 focus-visible:ring-ring/50"
+```
+
+## Dark Mode Support
+- Use `dark:` prefix for dark mode variants
+- Implement consistent dark mode color schemes
+- Test both light and dark themes
+description:
+globs:
+alwaysApply: false
+---
